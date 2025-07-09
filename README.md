@@ -61,16 +61,16 @@ FAQ.Ai is an advanced FAQ management system that leverages the power of Large La
 
 ```plaintext
 ┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
-│   Client Layer   │────▶│  API Gateway     │───▶│ Service Layer    │
+│   Client Layer   │───▶ │  API Gateway     │ ──▶│ Service Layer    │
 └──────────────────┘     └──────────────────┘     └──────────────────┘
                                                            │
 ┌──────────────────┐     ┌──────────────────┐              ▼
-│   Analytics      │◀────│  LLM Pipeline    │◀───┌──────────────────┐
+│   Analytics      │◀───│  LLM Pipeline    │◀─── ┌──────────────────┐
 └──────────────────┘     └──────────────────┘     │  Core Engine     │
                                                   └──────────────────┘
                                                            │
 ┌──────────────────┐     ┌──────────────────┐              ▼
-│  Knowledge Base  │────▶│  Language Graph  │◀───┌──────────────────┐
+│  Knowledge Base  │◀── │  Language Graph   │◀───┌──────────────────┐
 └──────────────────┘     └──────────────────┘     │  Data Layer      │
                                                   └──────────────────┘
 ```
