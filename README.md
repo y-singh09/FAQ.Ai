@@ -185,7 +185,7 @@ query {
 
 ```bash
 # Install development dependencies
-pip install -r requirements-dev.txt
+pip install -r requirements.txt
 
 # Run tests
 pytest
@@ -221,17 +221,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🆘 Support
 
-- 📧 Email: support@faq-ai.com
+- 📧 Email: satyajit.patra@vodafone.com
 - 💬 Discord: [Join our community](https://discord.gg/faq-ai)
 - 📚 Documentation: [docs.faq-ai.com](https://docs.faq-ai.com)
 - 🐛 Issue Tracker: [GitHub Issues](https://github.com/satyajit1106/FAQ.Ai/issues)
-
----
-
-<div align="center">
-
-**Made with ❤️ by [FAQ.Ai Team](https://github.com/satyajit1106)**
-
-*Last Updated: 2025-07-09 08:31:12 UTC*
-
-</div>
