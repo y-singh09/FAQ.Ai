@@ -61,7 +61,7 @@ FAQ.Ai is an advanced FAQ management system that leverages the power of Large La
 
 ```plaintext
 ┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
-│   Client Layer   │────▶│  API Gateway     │────▶│ Service Layer    │
+│   Client Layer   │────▶│  API Gateway     │───▶│ Service Layer    │
 └──────────────────┘     └──────────────────┘     └──────────────────┘
                                                            │
 ┌──────────────────┐     ┌──────────────────┐              ▼
