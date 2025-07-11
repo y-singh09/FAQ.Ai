@@ -4,31 +4,12 @@ from langchain.indexes import VectorstoreIndexCreator
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.chains import RetrievalQA
 from langchain_community.vectorstores import Chroma
+from langchain_groq import ChatGroq
 import streamlit as st
-from langchain_ibm import WatsonxLLM
 import os
 
-# Setup the credentials
-creds = {
-    "api_key": "txvo6Pf_tn6TRh6j6SPpwohUbqxd0yLGVte8BBA4oRTM",
-    "api_url": "https://eu-de.ml.cloud.ibm.com"
-}
-
-# Create the LLM using WatsonxLLM
-llm = WatsonxLLM(
-    model="ibm/granite-13b-chat-v2",
-    params={
-        "decoding_method": "sample",
-        "max_new_tokens": 200,
-        "temperature": 0.5
-    },
-    project_id="4e4cb703-076b-4b88-ad56-1759197c7d43",
-    url=creds["api_url"],
-    apikey=creds["api_key"]
-)
-
 # Streamlit app title
-st.title("Ask Watsonx")
+st.title("Ask Groq")
 
 # Hardcoded PDF file path
 pdf_path = "/workspaces/FAQ.Ai/AnswersNewComer.pdf"
@@ -60,10 +41,16 @@ for message in st.session_state.messages:
     st.chat_message(message["role"]).markdown(message["content"])
 
 # Build the prompt input
-prompt = st.text_input("Enter the question you want to ask Watsonx")
+prompt = st.text_input("Enter the question you want to ask Groq")
 
 # If the user submits a prompt
 if prompt and index:
+    # Initialize Groq LLM
+    llm = ChatGroq(
+        model_name="mixtral-8x7b-32768",  # You can change this to another supported model
+        temperature=0.5
+    )
+
     qa_chain = RetrievalQA.from_chain_type(
         llm=llm,
         chain_type="stuff",
