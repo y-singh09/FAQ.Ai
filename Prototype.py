@@ -1,87 +1,79 @@
-from langchain.document_loaders import PyPdfLoader
+from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.indexes import VectorstoreIndexCreator
-from langchain.embeddings import huggingfaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.chains import RetrievalQA
-
-
-# streamlit ui
+from langchain_community.vectorstores import Chroma
 import streamlit as st
-
-# watsonX interface
 from langchain_ibm import WatsonxLLM
+import os
 
-#setup the credentials
+# Setup the credentials
 creds = {
-    "api_key": "ZyI97fL0tvNju2Pe2v4iWnE0xo3n3CKDC2V1pYgxA5On",
+    "api_key": "txvo6Pf_tn6TRh6j6SPpwohUbqxd0yLGVte8BBA4oRTM",
     "api_url": "https://eu-de.ml.cloud.ibm.com"
 }
 
-#create the llm using the langchain
+# Create the LLM using WatsonxLLM
 llm = WatsonxLLM(
-    model="meta-llama/Llama-2-70b-chat",
+    model="ibm/granite-13b-chat-v2",
     params={
         "decoding_method": "sample",
         "max_new_tokens": 200,
         "temperature": 0.5
     },
-    project_id="51a6613d-b886-4c96-a641-c161049bfaae"
+    project_id="4e4cb703-076b-4b88-ad56-1759197c7d43",
+    url=creds["api_url"],
+    apikey=creds["api_key"]
 )
 
-# load the pdf file
+# Streamlit app title
+st.title("Ask Watsonx")
+
+# Input for PDF file path
+pdf_path = st.text_input("Enter the full path to your PDF file")
+
+# Load the PDF and create index
 @st.cache_resource
-def load_pdf():
-    #update the pdf name here
-    pdf_name = "what is gen ai.pdf" 
-    loaders = [PyPdfLoader(pdf_name)]
-
-    #create the index/ vector database / chromadb
+def load_pdf(path):
+    loaders = [PyPDFLoader(path)]
     index = VectorstoreIndexCreator(
+        vectorstore_cls=Chroma,
         text_splitter=RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200),
-        embedding=huggingfaceEmbeddings(model_name="all-MiniLM-L12-v2")
+        embedding=HuggingFaceEmbeddings(model_name="all-MiniLM-L12-v2")
     ).from_loaders(loaders)
-
-# return the vector database
     return index
 
-# loader er on up
-index = load_pdf()
+# Initialize index if path is provided
+index = None
+if pdf_path and os.path.exists(pdf_path):
+    index = load_pdf(pdf_path)
+elif pdf_path:
+    st.error("The specified file path does not exist.")
 
-# create the q&a chain
-qa_chain = RetrievalQA.from_chain_type( 
-    llm=llm,
-    chain_type="stuff",
-    retriever=index.vectorstore.as_retriever(), 
-    input_key="question",
-)
-
-#setup the app title
-st.title("ask watsonX")
-
-#setup the session state to store the old messages
+# Setup the session state to store old messages
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-#display the chat messages
+# Display the chat messages
 for message in st.session_state.messages:
     st.chat_message(message["role"]).markdown(message["content"])
 
-#Build the prompt input
-prompt = st.text_input("enter the question you want to ask watsonX")
+# Build the prompt input
+prompt = st.text_input("Enter the question you want to ask Watsonx")
 
-#if the user hit the enter key
-if prompt:
-    # display the prompt
+# If the user submits a prompt
+if prompt and index:
+    qa_chain = RetrievalQA.from_chain_type(
+        llm=llm,
+        chain_type="stuff",
+        retriever=index.vectorstore.as_retriever(),
+        input_key="question"
+    )
     st.chat_message("user").markdown(prompt)
-
-    # store the prompt in the session state
     st.session_state.messages.append({"role": "user", "content": prompt})
-
-    # send the prompt to llm
     response = qa_chain.run(prompt)
-
-    # show the llm response
     st.chat_message("assistant").markdown(response)
-
-    # store the llm response in the session state
     st.session_state.messages.append({"role": "assistant", "content": response})
+elif prompt and not index:
+    st.warning("Please provide a valid PDF path to load the document.")
