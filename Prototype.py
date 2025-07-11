@@ -30,8 +30,8 @@ llm = WatsonxLLM(
 # Streamlit app title
 st.title("Ask Watsonx")
 
-# Input for PDF file path
-pdf_path = st.text_input("Enter the full path to your PDF file")
+# Hardcoded PDF file path
+pdf_path = "/workspaces/FAQ.Ai/AnswersNewComer.pdf"
 
 # Load the PDF and create index
 @st.cache_resource
@@ -44,11 +44,11 @@ def load_pdf(path):
     ).from_loaders(loaders)
     return index
 
-# Initialize index if path is provided
+# Initialize index if path is valid
 index = None
-if pdf_path and os.path.exists(pdf_path):
+if os.path.exists(pdf_path):
     index = load_pdf(pdf_path)
-elif pdf_path:
+else:
     st.error("The specified file path does not exist.")
 
 # Setup the session state to store old messages
@@ -76,4 +76,4 @@ if prompt and index:
     st.chat_message("assistant").markdown(response)
     st.session_state.messages.append({"role": "assistant", "content": response})
 elif prompt and not index:
-    st.warning("Please provide a valid PDF path to load the document.")
+    st.warning("PDF file could not be loaded. Please check the file path.")
