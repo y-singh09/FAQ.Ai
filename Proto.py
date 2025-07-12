@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.indexes import VectorstoreIndexCreator
@@ -8,7 +9,7 @@ from langchain.vectorstores import Chroma
 from langchain_groq import ChatGroq
 
 # Set your Groq API key
-# os.environ["GROQ_API_KEY"] = ""
+os.environ["GROQ_API_KEY"] = ""
 
 # Load PDF and create index
 @st.cache_resource
@@ -29,7 +30,7 @@ llm = ChatGroq(
 )
 
 # UI
-st.title("📄 Please Ask Questions to YRS")
+st.title("📄 Please Ask Questions to YRS BOT")
 
 pdf_name = "AnswersNewComer.pdf"
 index = load_pdf(pdf_name)
