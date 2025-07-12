@@ -8,6 +8,7 @@ from langchain.chains import RetrievalQA
 from langchain.vectorstores import Chroma
 from langchain_groq import ChatGroq
 
+st.info("User friendly chat bot created by VOIS interns!:D")
 # Set your Groq API key
 os.environ["GROQ_API_KEY"] = ""
 
@@ -30,7 +31,14 @@ llm = ChatGroq(
 )
 
 # UI
-st.title("📄 Please Ask Questions to YRS BOT")
+col1, col2 = st.columns([1, 5])
+
+with col1:
+    st.image("bot.png", width=60)
+
+with col2:
+    st.title("YRS BOT - Your Office Buddy")
+
 
 pdf_name = "AnswersNewComer.pdf"
 index = load_pdf(pdf_name)
@@ -48,13 +56,13 @@ if "messages" not in st.session_state:
 for message in st.session_state.messages:
     st.chat_message(message["role"]).markdown(message["content"])
 
-prompt = st.chat_input("Type your question")
+prompt = st.chat_input("Ask your question")
 
 if prompt:
     st.chat_message("user").markdown(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    with st.spinner("Thinking..."):
+    with st.spinner("Generating Response please wait..."):
         response = qa_chain.run(prompt)
 
     st.chat_message("assistant").markdown(response)
