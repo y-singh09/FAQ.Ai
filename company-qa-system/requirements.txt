@@ -1,9 +1,0 @@
-langchain
-langgraph
-python-dotenv
-chromadb
-openai
-fastapi
-uvicorn
-pydantic
-pytest
