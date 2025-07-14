@@ -1,5 +1,7 @@
 import streamlit as st
 import os
+
+from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.indexes import VectorstoreIndexCreator
@@ -8,9 +10,11 @@ from langchain.chains import RetrievalQA
 from langchain.vectorstores import Chroma
 from langchain_groq import ChatGroq
 
+load_dotenv()
+
 st.info("User friendly chat bot created by VOIS interns!:D")
 # Set your Groq API key
-os.environ["GROQ_API_KEY"] = ""
+os.environ["GROQ_API_KEY"] = os.environ.get("API_KEY")
 
 # Load PDF and create index
 @st.cache_resource
