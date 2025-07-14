@@ -221,7 +221,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🆘 Support
 
-- 📧 Email: satyajit.patra@vodafone.com
+- 📧 Email: satyajit.patra@vodafone.com,yuvraaj.singh@vodafone.com,Raunak.Parmar@vodafone.com
 - 💬 Discord: [Join our community](https://discord.gg/faq-ai)
 - 📚 Documentation: [docs.faq-ai.com](https://docs.faq-ai.com)
 - 🐛 Issue Tracker: [GitHub Issues](https://github.com/satyajit1106/FAQ.Ai/issues)
