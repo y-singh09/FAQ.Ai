@@ -10,7 +10,7 @@ from langchain_groq import ChatGroq
 
 st.info("User friendly chat bot created by VOIS interns!:D")
 # Set your Groq API key
-os.environ["GROQ_API_KEY"] = ""
+os.environ["GROQ_API_KEY"] = "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"
 
 # Load PDF and create index
 @st.cache_resource
